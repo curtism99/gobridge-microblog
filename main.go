@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/gorilla/pat"
@@ -14,10 +15,23 @@ import (
 
 //Post is a blog post
 type Post struct {
-	Body  string    `json:"body"`
+	Body  Markdown  `json:"body"`
 	Time  time.Time `json:"time"`
 	Title string    `json:"title"`
 	//TODO add a Title field to Post
+}
+
+type Markdown string
+
+func (m Markdown) MarshalJSON() ([]byte, error) {
+	mkd := blackfriday.MarkdownCommon([]byte(m))
+
+	js, err := json.Marshal(string(mkd))
+	if err != nil {
+		return nil, err
+	}
+
+	return js, nil
 }
 
 var db []Post
@@ -31,6 +45,7 @@ func main() {
 	r.Post("/markdown", markdown)
 	r.Post("/posts", addPost)
 	r.Get("/posts", getPosts)
+	r.Delete("/posts/{id}", delPost)
 
 	r.Router.PathPrefix("/").Handler(http.FileServer(http.Dir("public")))
 
@@ -85,5 +100,27 @@ func getPosts(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
+}
+
+func delPost(w http.ResponseWriter, r *http.Request) {
+	//Figure out which post they want to delete
+	idStr := r.URL.Query().Get(":id")
+
+	id, err := strconv.Atoi(idStr)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	if id < 0 || id >= len(db) {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+
+	db = append(db[:id], db[id+1:]...)
+
+	w.WriteHeader(http.StatusNoContent)
 
 }

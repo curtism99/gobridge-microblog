@@ -1,7 +1,7 @@
 $.ajaxSetup({
-    dataType: "json",
+    dataType: 'json',
     contentType: 'application/json;charset=UTF-8'
-})
+});
 
 function updateList() {
     $("#post-list").empty();
@@ -10,8 +10,9 @@ function updateList() {
             url: '/posts'
         })
             .then(function(data) {
-                data.forEach(function(p) {
-                    var html = "<div class='post'><h2>" + p.title + "</h2><p>" + p.body + "</p><small class='time'>" + p.time + "</small></div><br/><br/>";
+                data.forEach(function(p, i) {
+                    var html = "<div class='post bg-success'><h2 style='font-style: italic;'>" + '"' + p.title + '"' + "</h2><p>" + p.body + "</p><br/><small class='time'>" + p.time + "</small></div><br/>";
+                    html += "<button style='margin-top: 25px;' class='del btn btn-lg btn-danger' data-id='" + i + "'>Delete</button>";
                     $("#post-list").append(html);
                 });
                 $("#title-field").val('');
@@ -22,14 +23,13 @@ function updateList() {
             });
 }
 
-
 $(function() {
     $("form").submit(function(e){
         e.preventDefault();
 
         var data = {
             body: $("textarea").val(),
-            title: $("input").val()
+            title: $("#title-field").val()
         };
 
         $.ajax({
@@ -44,6 +44,28 @@ $(function() {
                 alert("Failed to add Post.");
             });
     });
-});
 
-updateList();
+    $("#post-list").click(function(e){
+        var target = $(e.originalEvent.target);
+        if (!target.hasClass("del")) {
+            return;
+        }
+
+        var id = $(target).data("id");
+        console.log("Deleting post", id);
+
+        $.ajax({
+            type: 'DELETE',
+            url: '/posts/'+id
+        })
+            .then(function() {
+                updateList();
+            })
+            .fail(function() {
+                alert("Failed to delete Post.");
+            });
+    });
+
+    // Make the initial call to update our list of posts
+    updateList();
+});

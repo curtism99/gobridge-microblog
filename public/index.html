@@ -4,11 +4,25 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
 
+<style>
+   
+
+  
+
+    .post {
+        border-radius: 5px;
+        border: 2px green solid;
+        margin-bottom: -40px;
+        margin-top: 10px;
+    }
+
+    
+</style>
   </head>
   <body>
     <div class="container">
       <div class="page-title">
-        <h1>Microblog Powered By Go</h1>
+        <h1>Microblog Using Markdown Powered By Go</h1>
         <p class="lead">-Curtis Mullins | 06/26/16</p>
         <hr />
       </div>
@@ -19,16 +33,20 @@
         </div>
 
         <div class="form-group">
-          <textarea class="form-control" name="body" placeholder="Post Content..." cols="30" rows="10"></textarea>
+          <textarea class="form-control" name="body" placeholder="Enter your post using text or Markdown style..." cols="30" rows="10"></textarea>
         </div>
 
         <div class="form-group">
-          <input type="submit" class="btn btn-primary pull-right" />
+          <input type="submit" class="btn btn-lg btn-primary pull-right" />
+          <br/>
+          <br/>
         </div>
       </form>
 
       <div id="post-list">
         </div>
+        
+       
 
     </div>
 
