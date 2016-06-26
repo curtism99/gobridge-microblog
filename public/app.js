@@ -14,7 +14,7 @@ function updateList() {
                     var html = "<div class='post'><h2>" + p.title + "</h2><p>" + p.body + "</p><small class='time'>" + p.time + "</small></div><br/><br/>";
                     $("#post-list").append(html);
                 });
-                $("input").val('');
+                $("#title-field").val('');
                 $("textarea").val('');
             })
             .fail(function() {
