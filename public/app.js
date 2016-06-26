@@ -3,12 +3,31 @@ $.ajaxSetup({
     contentType: 'application/json;charset=UTF-8'
 })
 
+function updateList() {
+    $("#post-list").empty();
+    $.ajax({
+            type: 'GET',
+            url: '/posts'
+        })
+            .then(function(data) {
+                data.forEach(function(p) {
+                    var html = "<div class='post'><h2>" + p.title + "</h2><p>" + p.body + "</p><small class='time'>" + p.time + "</small></div><br/><br/>";
+                    $("#post-list").append(html);
+                });
+            })
+            .fail(function() {
+                alert("Could not get posts!");
+            });
+}
+
+
 $(function() {
     $("form").submit(function(e){
         e.preventDefault();
 
         var data = {
-            body: $("textarea").val()
+            body: $("textarea").val(),
+            title: $("input").val()
         };
 
         $.ajax({
@@ -17,11 +36,12 @@ $(function() {
             data: JSON.stringify(data),
         })
             .then(function() {
-                console.log("saved post");
-                alert("Saved post!")
+                updateList();
             })
-            .fail(function(resp) {
+            .fail(function() {
                 alert("Failed to add Post.");
             });
     });
 });
+
+updateList();

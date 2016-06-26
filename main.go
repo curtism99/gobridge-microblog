@@ -14,8 +14,10 @@ import (
 
 //Post is a blog post
 type Post struct {
-	Body string    `json:"body"`
-	Time time.Time `json:"time"`
+	Body  string    `json:"body"`
+	Time  time.Time `json:"time"`
+	Title string    `json:"title"`
+	//TODO add a Title field to Post
 }
 
 var db []Post
