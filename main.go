@@ -15,7 +15,7 @@ func main() {
 	http.HandleFunc("/markdown", markdown)
 	http.Handle("/", http.FileServer(http.Dir("public")))
 
-	port := os.Getenv("POST")
+	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
